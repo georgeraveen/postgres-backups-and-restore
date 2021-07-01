@@ -6,7 +6,7 @@ const exec = util.promisify(require("child_process").exec);
 
 dotenv.config();
 
-const pgdumpPath = process.env.PG_DUMP_PATH;
+const pgrestorePath = process.env.PG_RESTORE_PATH;
 const username = process.env.DB_USER;
 const database = process.env.DB_NAME;
 const pass = process.env.PGPASSWORD;
@@ -16,20 +16,24 @@ const date = new Date();
 //   }-${date.getDate()}-${date.getHours()}-${date.getMinutes()}`;
 // const fileName = `${database}-${currentDate}.sql`;
 const fileName = "testing.sql"
+const dropDB = `${pgrestorePath} "postgresql://${username}:${pass}@127.0.0.1:5433" -c "drop database ${database}"`
+const createDB = `${pgrestorePath} "postgresql://${username}:${pass}@127.0.0.1:5433" -c "create database ${database}"`
+const restoreDB = `${pgrestorePath} "postgresql://${username}:${pass}@127.0.0.1:5433/${database}" < backups/${fileName}`
 
-async function backup() {
-  await exec(
-    `${pgdumpPath} "postgresql://${username}:${pass}@127.0.0.1:5432/${database}" > backups/${fileName}`
-  );
-  console.log(`${pgdumpPath} "postgresql://${username}:${pass}@127.0.0.1:5432/${database}" > backups/${fileName}`)
-  console.log("Backup Successfull");
+async function restore() {
+  // console.log(dropDB)
+  await exec(dropDB)
+  await exec(createDB)
+  await exec(restoreDB)
+
+  console.log("restore Successfull");
 }
 
 
 
 async function main() {
   try {
-    await backup();
+    await restore();
   } catch (err) {
     console.log(err);
   }

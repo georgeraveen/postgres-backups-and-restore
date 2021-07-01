@@ -4,15 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "restore": "node restore.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^10.0.0",
-    "gzipme": "^1.0.0",
-    "node-cron": "^3.0.0",
-    "nodemailer": "^6.6.2"
+    "gzipme": "^1.0.0"
   }
 }
